@@ -1,0 +1,87 @@
+from requests import get
+from pprint import pprint
+endpoint='https://newsapi.org/v2/everything?q=apple&from=2025-02-27&to=2025-02-27&sortBy=popularity&apiKey=9f28c68ef1d84a41a17a0798347f6613'
+response=get(url=endpoint)
+data=response.json()
+#pprint(data)
+
+def update():
+
+    update_name=input('Güncellemek istediğiniz verinin yazar ismini'
+                      'mi yoksa verinin linkini mi gireceksiniz yazınız:')
+    match update_name:
+        case 'url':
+            url_name=input('Urlyi giriniz:')
+            for item in data['articles']:
+                if item['url']==url_name:
+                    item['author']=input('NAME:')
+                    item['content'] = input('CONTENT:')
+            print('Güncellendi.')
+            return
+        case'yazar ismi':
+          author_name = input('Güncellemek istediğiniz verinin yazar ismini giriniz:')
+          for item in data['articles']:
+                if item['author'] == author_name:
+                    item['author'] = input('NAME:')
+                    item['content'] = input('CONTENT:')
+          print('Güncellendi.')
+          return
+        case _:
+            print('Güncellendi.')
+
+def delete():
+    delete_name=input('Silmek istediğiniz verinin yazar ismini giriniz: ')
+    for item in data ['articles']:
+        if item['author']==delete_name:
+            data['articles'].remove(item)
+            return
+    print('Veri silindi.')
+
+def create():
+    name=input('yazar ismi:')
+    content = input('content:')
+    description = input('description:')
+    new_article = {
+        'author': name,
+        'content': content,
+        'description': description
+    }
+    data['articles'].append(new_article)
+
+    print('Veri eklendi.')
+
+
+
+
+def read():
+    author_name = input("yazar ismi:")
+    for article in data['articles']:
+     if article['author']==author_name:
+         print(f'content: {article['content']}')
+         print(f'description: {article['description']}')
+         return
+    print('Böyle bir yazar yok')
+
+
+
+def list():
+ pprint(data['articles'])
+
+
+while True:
+ choose=input('Yapmak istediğiniz işlemi yazınız:')
+
+ match choose:
+  case'update':
+      update()
+  case'delete':
+      delete()
+  case'create':
+      create()
+  case'read':
+      read()
+  case'list':
+      list()
+  case _ :
+     print('Lütfen geçerli işlem giriniz')
+
